@@ -42,7 +42,7 @@ func RoomConn(c *websocket.Conn, p *Peers) {
 	//Create a new peer state and keep track of it
 	newPeer := PeerConnectionState{
 		PeerConnection: peerConnection,
-		websocket: &ThreadSafeWriter{
+		Websocket: &ThreadSafeWriter{
 			Conn:  c,
 			Mutex: sync.Mutex{},
 		},
@@ -64,7 +64,7 @@ func RoomConn(c *websocket.Conn, p *Peers) {
 		}
 
 		// Send the ICE candidate to the peer through WebSocket
-		if writeErr := newPeer.websocket.WriteJSON(&websocketMessage{
+		if writeErr := newPeer.Websocket.WriteJSON(&websocketMessage{
 			Event: "candidate",
 			Data:  string(candidateString),
 		}); writeErr != nil {

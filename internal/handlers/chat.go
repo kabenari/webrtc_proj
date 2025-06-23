@@ -1,24 +1,10 @@
 package handlers
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
 	"github.com/kabenari/webrtc/pkg/chat"
 	w "github.com/kabenari/webrtc/pkg/webrtc"
 )
-
-//- This function is a simple HTTP handler that renders the "chat" template using a layout named "main". It's used to serve the initial HTML page (`chat.html`) for the chat room.
-//- Input: `fiber.Ctx`, which provides context for the HTTP request.
-//- Output: Renders the template and sends it as an HTTP response using Fiber's `Render` method.
-
-func RoomChat(c *fiber.Ctx) error {
-	return c.Render("chat", nil, "layouts/main")
-}
-
-//- Retrieves the room and ensures its `Hub` (WebSocket message broadcasting hub) is not
-//nil (meaning the room exists and is configured for WebSocket communication).
-//- If everything is valid, calls `chat.PeerChatConn` to handle the WebSocket connection,
-//pushing the user into the room's chat hub.
 
 // RoomChatWebsocket establishes a WebSocket connection for chatting inside a room.
 //

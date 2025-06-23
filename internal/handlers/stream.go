@@ -19,20 +19,18 @@ func Stream(c *fiber.Ctx) error {
 		ws = "wss"
 	}
 	w.RoomsLock.Lock()
-	if _, ok := w.Streams[suuid]; ok {
-		w.RoomsLock.Unlock()
-		return c.Render("stream", fiber.Map{
-			"StreamWebsocketAddr": fmt.Sprintf("%s://%s/stream/%s/websocket", ws, c.Hostname(), suuid),
-			"ChatWebsocketAddr":   fmt.Sprintf("%s://%s/stream/%s/chat/websocket", ws, c.Hostname(), suuid),
-			"ViewerWebSocketAddr": fmt.Sprintf("%s://%s/stream/%s/viewer/websocket", ws, c.Hostname(), suuid),
-			"Type":                "stream",
-		}, "layouts/main")
-	}
+	_, ok := w.Rooms[suuid]
 	w.RoomsLock.Unlock()
-	return c.Render("stream", fiber.Map{
-		"NoStream": "true",
-		"Leave":    "true",
-	}, "layouts/main")
+	if ok {
+		return c.JSON(fiber.Map{
+			"streamWebsocketAddr": fmt.Sprintf("%s://%s/stream/%s/websocket", ws, c.Hostname(), suuid),
+			"chatWebsocketAddr":   fmt.Sprintf("%s://%s/stream/%s/chat/websocket", ws, c.Hostname(), suuid),
+			"viewerWebSocketAddr": fmt.Sprintf("%s://%s/stream/%s/viewer/websocket", ws, c.Hostname(), suuid),
+		})
+	}
+	return c.Status(404).JSON(fiber.Map{
+		"error": "Stream not found",
+	})
 }
 
 func StreamWebsocket(c *websocket.Conn) {

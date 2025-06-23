@@ -34,7 +34,7 @@ func StreamConn(c *websocket.Conn, p *Peers) {
 
 	newPeer := PeerConnectionState{
 		PeerConnection: peerConnection,
-		websocket: &ThreadSafeWriter{
+		Websocket: &ThreadSafeWriter{
 			Conn:  c,
 			Mutex: sync.Mutex{},
 		},
@@ -56,7 +56,7 @@ func StreamConn(c *websocket.Conn, p *Peers) {
 			return
 		}
 
-		if writeErr := newPeer.websocket.WriteJSON(&websocketMessage{
+		if writeErr := newPeer.Websocket.WriteJSON(&websocketMessage{
 			Event: "candidate",
 			Data:  string(candidateString),
 		}); writeErr != nil {

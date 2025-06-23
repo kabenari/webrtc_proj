@@ -24,7 +24,7 @@ type Peers struct {
 
 type PeerConnectionState struct {
 	PeerConnection *webrtc.PeerConnection
-	websocket      *ThreadSafeWriter
+	Websocket      *ThreadSafeWriter
 }
 
 type ThreadSafeWriter struct {
@@ -122,7 +122,7 @@ func (p *Peers) SignalPeerConnections() {
 				return true
 			}
 
-			if err = p.Connections[i].websocket.WriteJSON(&websocketMessage{
+			if err = p.Connections[i].Websocket.WriteJSON(&websocketMessage{
 				Event: "offer",
 				Data:  string(offerString),
 			}); err != nil {
